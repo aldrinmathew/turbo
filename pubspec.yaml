@@ -1,6 +1,6 @@
 name: turbo
 description: A super-fast, efficient state management solution for flutter
-version: 0.0.1
+version: 1.0.0
 environment:
   sdk: ">=2.12.0 <3.0.0"
 dependencies:
