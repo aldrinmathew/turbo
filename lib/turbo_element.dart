@@ -20,7 +20,10 @@ class TurboElement extends ComponentElement {
   }
 
   @override
+  @mustCallSuper
   void unmount() {
+    /// Detaches the corresponding `TurboWidget` from the `TurboController` when
+    ///  the element is unmounted from the widget tree.
     widget._detach();
     super.unmount();
   }

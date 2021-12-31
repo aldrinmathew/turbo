@@ -2,7 +2,34 @@
 
 part of turbo;
 
-abstract class TurboWidget<C extends TurboController> extends Widget {
+/// Replacement for [StatelessWidget] but with the ability to respond to changes
+///  in attached [TurboController] instances.
+///
+/// You cannot use `const` constructor for this widget, as a const widget cannot
+///  respond to changes
+///
+/// ```
+/// class MyWidget extends TurboWidget {
+///   /// You cannot use `const` constructor for this widget, as a const widget
+///   /// cannot respond to changes
+///   MyWidget({ Key? key }): super(key: key);
+///
+///   /// Called by the framework when this widget is inserted into the widget
+///   ///  tree.
+///   @override
+///   void init() {
+///     attach(myFirstController);
+///     attach(mySecondController);
+///     ...
+///     /// Attach as many controllers that this widget should respond the
+///     ///  changes of, to
+///     ...
+///   }
+///
+///   ...
+/// }
+/// ```
+abstract class TurboWidget extends Widget {
   /// Initializes [key] for subclasses.
   TurboWidget({Key? key}) : super(key: key);
 
@@ -52,23 +79,50 @@ abstract class TurboWidget<C extends TurboController> extends Widget {
   ///
   /// If a widget's [build] method is to depend on anything else, use a
   /// [StatefulWidget] instead.
-  ///
-  /// See also:
-  ///
-  ///  * [TurboWidget], which contains the discussion on performance considerations.
   @protected
   Widget build(BuildContext context);
 
-  abstract void Function() init;
+  /// Called by the framework when the corresponding element of this widget is
+  ///  initialized.
+  void init();
 
+  /// List of all indexes of this widget in the corresponding controllers
   final List<int> _widgetIndices = [];
-  final List<C> _allControllers = [];
 
-  void attach(C controller) {
+  /// All `TurboController` instances that this widget is attached to.
+  final List<TurboController> _allControllers = [];
+
+  /// Attach this widget to a [TurboController]
+  ///
+  /// The widget will be automatically detached from the controller when the
+  ///  [dispose] function is called by the framework. If you are overriding the
+  ///  [dispose] function, remember to call `super.dispose()`. Otherwise, the
+  ///  widget will not be detached from the controller
+  void attach<C extends TurboController>(C controller) {
     _widgetIndices.add(controller._attachWidget(this));
     _allControllers.add(controller);
   }
 
+  /// For Special use cases when controllers have to be manually detached
+  ///  before the widget is removed from the widget tree. Using this is purely
+  ///  optional, as controllers will be automatically detached from the widget
+  ///  when the framework removes the widget's element.
+  ///
+  /// Example: if the controller object is destroyed or unusable, use this to
+  /// detach it from the state
+  void detachOne<C extends TurboController>(C controller) {
+    int index = _allControllers.indexOf(controller);
+    if (index != -1) {
+      _allControllers[index]._detach(_widgetIndices[index]);
+      _allControllers.removeAt(index);
+      _widgetIndices.removeAt(index);
+    }
+  }
+
+  /// Detaches this widget from a [TurboController]
+  ///
+  /// This is automatically called by the corresponding [TurboElement] when that
+  ///  element is unmounted from the widget tree by the framework
   void _detach() {
     for (int i = 0; i < _widgetIndices.length; i++) {
       _allControllers[i]._detach(_widgetIndices[i]);

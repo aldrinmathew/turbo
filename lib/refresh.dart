@@ -2,10 +2,10 @@
 
 part of turbo;
 
-/// Refreshes the widget remotely and after checking if it is actually mounted
-///  in the widget tree. This also checks for `WidgetsBinding.instance`, so as to
-///  make sure that the `setState` method is not called while the framework is
-///  building the widget.
+/// Refreshes the [TurboState] remotely after checking if it is actually
+///  mounted in the widget tree. This also checks for [WidgetsBinding.instance],
+///  so as to make sure that the `setState` method is not called while the
+///  framework is building the widget.
 void stateRefresh<T extends StatefulWidget>({
   required State<T> state,
   void Function()? change,
@@ -27,6 +27,10 @@ void stateRefresh<T extends StatefulWidget>({
   }
 }
 
+/// Refreshes the [TurboWidget] remotely using its [TurboElement] after checking
+///  if it is actually mounted in the widget tree. This also checks for
+///  [WidgetsBinding.instance], so as to make sure that the `setState` method is
+///  not called while the framework is building the widget.
 void widgetRefresh({required TurboElement element}) {
   if (WidgetsBinding.instance != null) {
     if (WidgetsBinding.instance!.buildOwner != null) {

@@ -3,7 +3,8 @@ part of turbo;
 abstract class TurboController {
   final List<void Function()> _callbacks = [];
 
-  /// Attaches a widget state to this Controller so as to automatically update.
+  /// Attaches a [TurboState] to this Controller so as to automatically rebuild
+  ///  it when member variables are updated
   ///
   /// It returns an integer which is the index that can be used to detach the
   ///  widget's state from this controller
@@ -15,7 +16,8 @@ abstract class TurboController {
     return _callbacks.length - 1;
   }
 
-  /// Attaches a TurboWidget to this Controller so as to automatically update.
+  /// Attaches a [TurboWidget] to this controller so as to automatically rebuild
+  ///  it when member variables are updated
   ///
   /// It returns an integer which is the index that can be used to detach the
   ///  widget from this controller
@@ -39,5 +41,33 @@ abstract class TurboController {
     for (var callback in _callbacks) {
       callback();
     }
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+    );
+  }
+}
+
+class MyWidget2 extends StatefulWidget {
+  const MyWidget2({ Key? key, required this.hello }) : super(key: key);
+  final int hello;
+
+  @override
+  _MyWidget2State createState() => _MyWidget2State();
+}
+
+class _MyWidget2State extends State<MyWidget2> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+    );
   }
 }
