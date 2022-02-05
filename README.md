@@ -1,8 +1,12 @@
 # turbo
 
-A super-fast, efficient state management solution for Flutter.
+A simple, efficient state management solution for Flutter...
 
-Turbo does not use streams, which are extremely inefficient, or use complex abstractions, which does not help with Dart's tree shaking. As we know, Dart can't remove things that are used, and as such, when there are complex abstractions, most things are not removed during compilation.
+Turbo does not use streams, or complex abstractions. The developer have to explicitly call the `refresh()` function to update state based on the changes. This ensures that you can be aware of those parts in your codebase that causes changes in state.
+
+Turbo is efficient compared to other state management solutions providing controller logic, in the sense that it acheives the same result with simpler implementation and footprint. Instead of using streams or abstractions that hide complexity, it nudges the developer to leverage getters, setters and functions to acheive the result.
+
+Complex abstractions often mean that there are a lot of interdependent code. Dart's tree shaking cannot remove things that are used (it shouldn't to begin with). But unlike what most people assume, your app is not going to contain just the things that you explicitly refer to or use in your code, after tree shaking. It will also contain all the dependencies of your app's dependencies. So in such a scenario, your app ends up including majority of the package's footprint. Also, Turbo is implemented in less than 400 lines of code (including comments), not that it matters.
 
 ### Controller Logic
 
@@ -16,18 +20,19 @@ class CountController extends TurboController {
         _get = value;
         refresh();
     }
+
+    /// You can also do this if you prefer
+    void increment() {
+        _count++;
+        refresh();
+    }
 }
 
-/// You can also do this if you prefer
-void increment() {
-    _count++;
-    refresh();
-}
 ```
 
 ### Attach Widgets/States to Controllers
 
-Instantiate the Controller wherever you prefer it to stay. It can even be a global variable. Then attach it to a TurboState or a TurboWidget, as you prefer. Your widget will automatically react to changes according to the Controller logic that you designed.
+Instantiate the Controller wherever you prefer it to stay. It can even be a global variable, if you how to use it effectively. Then attach it to a TurboState or a TurboWidget, as you prefer. Your widget will automatically react to changes according to the Controller logic that you designed.
 
 ```dart
 var counter = CountController();

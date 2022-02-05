@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Updated README and package metadata
+
 ## 1.1.0
 
 - Added ability to attach controllers of different types to the same widget
