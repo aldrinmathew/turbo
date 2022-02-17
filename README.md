@@ -1,4 +1,4 @@
-# turbo
+![Turbo](./media/cover_wide.png)
 
 A simple, efficient state management solution for Flutter...
 
