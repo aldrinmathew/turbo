@@ -43,27 +43,3 @@ abstract class TurboController {
     }
   }
 }
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class MyWidget2 extends StatefulWidget {
-  const MyWidget2({Key? key, required this.hello}) : super(key: key);
-  final int hello;
-
-  @override
-  _MyWidget2State createState() => _MyWidget2State();
-}
-
-class _MyWidget2State extends State<MyWidget2> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
