@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Updated README
+
 ## 1.2.0
 
 - refresh function is now asynchronous. It can be invoked according to the situation

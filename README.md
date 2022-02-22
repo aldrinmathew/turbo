@@ -1,4 +1,4 @@
-![Turbo](./media/cover_wide.png)
+![Turbo](https://raw.githubusercontent.com/aldrinsartfactory/turbo/main/media/cover_wide.png)
 
 A simple, efficient state management solution for Flutter...
 
