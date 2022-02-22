@@ -1,6 +1,6 @@
 name: turbo
 description: A simple, efficient state management solution for Flutter...
-version: 1.1.1
+version: 1.2.0
 homepage: https://github.com/aldrinsartfactory/turbo
 repository: https://github.com/aldrinsartfactory/turbo
 environment:

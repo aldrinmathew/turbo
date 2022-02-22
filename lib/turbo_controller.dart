@@ -1,5 +1,13 @@
 part of turbo;
 
+/// The core component of controller logic.
+/// If you want to implement controller logic in your application using Turbo,
+///  you will be using this abstraction
+///
+/// The [refresh] function has to explicitly called for all the attached widgets
+///  and states to be updated properly. This also ensures that the part of the
+///  code that causes a change in state can easily be pinpointed, in contrast to
+///  other solutions that handles it automatically.
 abstract class TurboController {
   final List<void Function()> _callbacks = [];
 

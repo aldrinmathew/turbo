@@ -1,3 +1,11 @@
+## 1.2.0
+
+- refresh function is now asynchronous. It can be invoked according to the situation
+- It is also asynchronous by default so as to prevent frame drops in complex codebases
+- Added TurboBuilder to make the workflow more flexible and easier
+- Added more documentation
+- Updated README with example of TurboBuilder
+
 ## 1.1.1
 
 - Updated README and package metadata

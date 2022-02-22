@@ -65,7 +65,6 @@ class _MyCounterState extends TurboState<MyCounter> {
 ```
 Or to a `TurboWidget` as follows,
 ```dart
-
 class MyCounter extends TurboWidget {
     MyCounter({Key key}) : super(key: key);
     
@@ -82,10 +81,22 @@ class MyCounter extends TurboWidget {
         ...
     }
 }
-
 ```
 
 You can attach multiple controllers of different types and purposes and the widget will react to all changes in the member variables of the controllers. Keep in mind, you have to call `refresh()` function in your controller logic to trigger the updation of widgets after a change.
+
+### Use `TurboBuilder` with the controllers
+
+In order to acheive the flexibility of the controller without separating your logic for a component of the UI to a different file, use `TurboBuilder`
+
+```dart
+TurboBuilder(
+    controller: counter,
+    builder: (myCtrl) {
+        return Text(myCtrl.count.toString());
+    }
+)
+```
 
 ### Detaching controllers
 
