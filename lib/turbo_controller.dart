@@ -37,7 +37,7 @@ abstract class TurboController {
   }
 
   /// Refresh/Update all attached widgets and states
-  void refresh() {
+  Future<void> refresh() async {
     for (var callback in _callbacks) {
       callback();
     }
