@@ -3,24 +3,39 @@
 import 'package:flutter/material.dart';
 import 'package:turbo/turbo.dart';
 
+/// Creating events for the controller
+enum CountEvents { increase, decrease }
+
 /// file: count_controller.dart
 
-class CountController extends TurboController {
+class CountController extends TurboController<CountEvents> {
   int _count = 0;
   int get count => _count;
   set count(int value) {
     _count = value;
-    refresh();
+
+    /// Using events in the refresh function
+    /// You can also emit the `event` parameter so that widgets that are not subscribed
+    /// to any event are the only ones updated
+    refresh(
+      event: value > count
+          ? CountEvents.increase
+          : (value < count ? CountEvents.decrease : null),
+    );
   }
 
   void increment() {
     _count++;
-    refresh();
+
+    /// Event parameter can be omitted
+    refresh(event: CountEvents.increase);
   }
 
   void decrement() {
     _count--;
-    refresh();
+
+    /// Event parameter can be omitted
+    refresh(event: CountEvents.decrease);
   }
 }
 
@@ -40,7 +55,15 @@ class MyCounter extends StatefulWidget {
 class _MyCounterState extends TurboState<MyCounter> {
   @override
   void initState() {
+    /// Widget's state will be updated for all events
     attach(counter);
+
+    /// Or you can use `TurboEvent` like below so that the widget is updated only
+    /// for the specified events.
+    ///
+    /// In the following scenario, the widget's state will only update if the
+    /// count value increases.
+    attach(counter, event: TurboEvent(events: [CountEvents.increase]));
 
     /// Attach as many controllers as you want, of various types and purposes
     super.initState();
@@ -99,7 +122,15 @@ class MyCounterWidget extends TurboWidget {
 
   @override
   void init() {
+    /// Widget's state will be updated for all events
     attach(counter);
+
+    /// Or you can use `TurboEvent` like below so that the widget is updated only
+    /// for the specified events.
+    ///
+    /// In the following scenario, the widget's state will only update if the
+    /// count value decreases.
+    attach(counter, event: TurboEvent(events: [CountEvents.decrease]));
 
     /// Attach as many controllers as you want, of various types and purposes
   }

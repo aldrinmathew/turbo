@@ -8,3 +8,4 @@ part 'turbo_state.dart';
 part 'turbo_widget.dart';
 part 'turbo_element.dart';
 part 'turbo_builder.dart';
+part 'turbo_event.dart';
