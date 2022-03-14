@@ -98,9 +98,17 @@ abstract class TurboWidget extends Widget {
   ///  [dispose] function is called by the framework. If you are overriding the
   ///  [dispose] function, remember to call `super.dispose()`. Otherwise, the
   ///  widget will not be detached from the controller
-  void attach<C extends TurboController>(C controller) {
-    _widgetIndices.add(controller._attachWidget(this));
-    _allControllers.add(controller);
+  ///
+  /// You can provide an optional `TurboEvent` that this widget should react to
+  /// and the state will be updated only if the provided events occur
+  void attach<E, C extends TurboController<E>>(
+    C controller, {
+    TurboEvent<E>? event,
+  }) {
+    if (!_allControllers.contains(controller)) {
+      _widgetIndices.add(controller._attachWidget(this, event));
+      _allControllers.add(controller);
+    }
   }
 
   /// For Special use cases when controllers have to be manually detached
