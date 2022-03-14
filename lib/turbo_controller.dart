@@ -57,22 +57,52 @@ abstract class TurboController<E> {
     _events[index] = null;
   }
 
+  /// Get the appropriate `TurboEvent`
+  ///
+  /// `TurboEvent` represents events associated with a controller, that the widgets
+  /// should respond to.
+  ///
+  /// The constuctor for `TurboEvent` is private as it doesn't support Type
+  /// Inference. Using this function ensures that the values passed are of the
+  /// right type
+  ///
+  /// `values` is the list of all events the widget should respond to. Ideally
+  /// this should be a list of `enum` values
+  ///
+  /// `after` is the callback to be called after the widget's state is updated
+  ///
+  /// `before` is the callaback to be called before the widget's state is
+  /// updated
+  ///
+  /// It is recommended to use the `after` callback more, so as to reduce
+  /// conflicts in state updations. But if you know what you are doing, go for
+  /// it
+  TurboEvent<E> event(
+    List<E> values, {
+    void Function(E event)? after,
+    void Function(E event)? before,
+  }) {
+    return TurboEvent<E>._(values, after: after, before: before);
+  }
+
   /// Refresh/Update all attached widgets and states
-  Future<void> refresh({E? event}) async {
+  ///
+  /// Provide `emit` so as to update widgets waiting for that event
+  Future<void> refresh({E? emit}) async {
     for (int i = 0; i < _callbacks.length; i++) {
       if (_callbacks[i] != null) {
         if (_events[i] == null) {
           _callbacks[i]!();
-        } else if (event != null) {
-          if (_events[i]!.events.contains(event)) {
+        } else if (emit != null) {
+          if (_events[i]!.events.contains(emit)) {
             if (_events[i]!.before != null) {
-              _events[i]!.before!(event);
+              _events[i]!.before!(emit);
             }
 
             _callbacks[i]!();
 
             if (_events[i]!.after != null) {
-              _events[i]!.after!(event);
+              _events[i]!.after!(emit);
             }
           }
         }

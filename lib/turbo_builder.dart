@@ -38,7 +38,7 @@ class _TurboBuilderState<E, T extends TurboController<E>>
   void initState() {
     attach(
       widget.controller,
-      event: widget.event,
+      subscribeTo: widget.event,
     );
     super.initState();
   }

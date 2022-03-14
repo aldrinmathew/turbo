@@ -49,12 +49,14 @@ abstract class TurboState<S extends StatefulWidget> extends State<S> {
   ///  state will not be detached from the controller
   ///
   /// You can provide an optional `TurboEvent` that this widget should react to
-  /// and the state will be updated only if the provided events occur
+  /// and the state will be updated only if the provided events occur. Use
+  /// [TurboController.event] or more specifically `yourController.event` to
+  /// get the appropriate `TurboEvent` instance
   void attach<E, C extends TurboController<E>>(
     C controller, {
-    TurboEvent<E>? event,
+    TurboEvent<E>? subscribeTo,
   }) {
-    _stateIndices.add(controller._attachState(this, event));
+    _stateIndices.add(controller._attachState(this, subscribeTo));
     _allControllers.add(controller);
   }
 

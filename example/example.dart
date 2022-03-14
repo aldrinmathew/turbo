@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:turbo/turbo.dart';
 
-/// Creating events for the controller
-enum CountEvents { increase, decrease }
+/// Creating events for the controller. Enums are recommended for most
+/// scenarios, but you can also use classes for expanded functionality
+enum CountEvent { increase, decrease }
 
 /// file: count_controller.dart
 
-class CountController extends TurboController<CountEvents> {
+/// Specify the type of the event to be associated with this controller
+class CountController extends TurboController<CountEvent> {
   int _count = 0;
   int get count => _count;
   set count(int value) {
@@ -18,24 +20,24 @@ class CountController extends TurboController<CountEvents> {
     /// You can also emit the `event` parameter so that widgets that are not subscribed
     /// to any event are the only ones updated
     refresh(
-      event: value > count
-          ? CountEvents.increase
-          : (value < count ? CountEvents.decrease : null),
+      emit: value > count
+          ? CountEvent.increase
+          : (value < count ? CountEvent.decrease : null),
     );
   }
 
   void increment() {
     _count++;
 
-    /// Event parameter can be omitted
-    refresh(event: CountEvents.increase);
+    /// `emit` parameter can be omitted
+    refresh(emit: CountEvent.increase);
   }
 
   void decrement() {
     _count--;
 
-    /// Event parameter can be omitted
-    refresh(event: CountEvents.decrease);
+    /// `emit` parameter can be omitted
+    refresh(emit: CountEvent.decrease);
   }
 }
 
@@ -58,12 +60,21 @@ class _MyCounterState extends TurboState<MyCounter> {
     /// Widget's state will be updated for all events
     attach(counter);
 
-    /// Or you can use `TurboEvent` like below so that the widget is updated only
+    /// Or you can provide `watch` like below so that the widget is updated only
     /// for the specified events.
     ///
     /// In the following scenario, the widget's state will only update if the
     /// count value increases.
-    attach(counter, event: TurboEvent(events: [CountEvents.increase]));
+    attach(
+      counter,
+      subscribeTo: counter.event(
+        [CountEvent.increase],
+
+        /// `after` and `before` arguments are optional
+        // ignore: avoid_print
+        after: (_) => print('Value increased'),
+      ),
+    );
 
     /// Attach as many controllers as you want, of various types and purposes
     super.initState();
@@ -130,7 +141,16 @@ class MyCounterWidget extends TurboWidget {
     ///
     /// In the following scenario, the widget's state will only update if the
     /// count value decreases.
-    attach(counter, event: TurboEvent(events: [CountEvents.decrease]));
+    attach(
+      counter,
+      subscribeTo: counter.event(
+        [CountEvent.decrease],
+
+        /// `after` and `before` arguments are optional
+        // ignore: avoid_print
+        after: (_) => print('Value decreased'),
+      ),
+    );
 
     /// Attach as many controllers as you want, of various types and purposes
   }

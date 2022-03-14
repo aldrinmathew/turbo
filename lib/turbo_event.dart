@@ -1,10 +1,14 @@
 part of turbo;
 
-/// TurboEvent represents Events associated with a controller, that the widgets
-/// should respond to. Note that if the provided events doesn't occur, the
-/// widget's state will not be updated at all
+/// `TurboEvent` represents events associated with a controller, that the widgets
+/// should respond to. Use [TurboController.event] or `yourController.event`
+/// to get the corresponding event
 ///
-/// `events` is the list of all Events the widget should respond to. Ideally
+/// The constuctor for `TurboEvent` is private as it doesn't support Type
+/// Inference. Using this function ensures that the values passed are of the
+/// right type
+///
+/// `values` is the list of all events the widget should respond to. Ideally
 /// this should be a list of `enum` values
 ///
 /// `after` is the callback to be called after the widget's state is updated
@@ -16,10 +20,15 @@ part of turbo;
 /// conflicts in state updations. But if you know what you are doing, go for
 /// it
 class TurboEvent<E> {
-  /// TurboEvent represents Events associated with a controller, that the widgets
-  /// should respond to.
+  /// `TurboEvent` represents events associated with a controller, that the widgets
+  /// should respond to. Use [TurboController.event] or `yourController.event`
+  /// to get the corresponding event
   ///
-  /// `events` is the list of all Events the widget should respond to. Ideally
+  /// The constuctor for `TurboEvent` is private as it doesn't support Type
+  /// Inference. Using this function ensures that the values passed are of the
+  /// right type
+  ///
+  /// `values` is the list of all events the widget should respond to. Ideally
   /// this should be a list of `enum` values
   ///
   /// `after` is the callback to be called after the widget's state is updated
@@ -30,8 +39,8 @@ class TurboEvent<E> {
   /// It is recommended to use the `after` callback more, so as to reduce
   /// conflicts in state updations. But if you know what you are doing, go for
   /// it
-  TurboEvent({
-    required this.events,
+  TurboEvent._(
+    this.events, {
     this.after,
     this.before,
   });
