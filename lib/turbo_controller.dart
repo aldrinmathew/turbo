@@ -9,10 +9,11 @@ part of turbo;
 ///  code that causes a change in state can easily be pinpointed, in contrast to
 ///  other solutions that handles it automatically.
 abstract class TurboController<E> {
-  /// All callbacks of all widgets that are attached to this
+  /// All callbacks of all widgets that are attached to this controller
   final List<void Function()?> _callbacks = [];
 
-  /// All
+  /// All events registered with the controller. All events only supports one
+  /// type of Event `E` provided by the user
   final List<TurboEvent<E>?> _events = [];
 
   /// Attaches a [TurboState] to this Controller so as to automatically rebuild
@@ -21,7 +22,9 @@ abstract class TurboController<E> {
   /// It returns an integer which is the index that can be used to detach the
   ///  widget's state from this controller
   int _attachState<K extends StatefulWidget, T extends State<K>>(
-      T widgetState, TurboEvent<E>? turboEvent) {
+    T widgetState,
+    TurboEvent<E>? turboEvent,
+  ) {
     _callbacks.add(() {
       stateRefresh(state: widgetState);
     });
@@ -34,13 +37,16 @@ abstract class TurboController<E> {
   ///
   /// It returns an integer which is the index that can be used to detach the
   ///  widget from this controller
-  int _attachWidget<T extends TurboWidget>(T widget, TurboEvent<E>? event) {
+  int _attachWidget<T extends TurboWidget>(
+    T widget,
+    TurboEvent<E>? turboEvent,
+  ) {
     _callbacks.add(() {
       if (widget.element != null) {
         widgetRefresh(element: widget.element!);
       }
     });
-    _events.add(event);
+    _events.add(turboEvent);
     return _callbacks.length - 1;
   }
 

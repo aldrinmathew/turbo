@@ -47,8 +47,14 @@ abstract class TurboState<S extends StatefulWidget> extends State<S> {
   ///  [dispose] function is called by the framework. If you are overriding the
   ///  [dispose] function, remember to call `super.dispose()`. Otherwise, the
   ///  state will not be detached from the controller
-  void attach<C extends TurboController>(C controller) {
-    _stateIndices.add(controller._attachState(this));
+  ///
+  /// You can provide an optional `TurboEvent` that this widget should react to
+  /// and the state will be updated only if the provided events occur
+  void attach<E, C extends TurboController<E>>(
+    C controller, {
+    TurboEvent<E>? event,
+  }) {
+    _stateIndices.add(controller._attachState(this, event));
     _allControllers.add(controller);
   }
 
