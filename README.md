@@ -13,18 +13,48 @@ Complex abstractions often mean that there are a lot of interdependent code. Dar
 Create a controller by extending the `TurboController` class. It is important that you call the `refresh()` function after you make changes to variables. That function makes sure that all `TurboWidget`s and `TurboState`s attached to this controller gets updated after the change
 
 ```dart
+/// Use a normal controller
 class CountController extends TurboController {
     int _count = 0;
     int get count => _count;
     set count(int value) {
-        _get = value;
+        _count = value;
+        /// Event parameter can be omitted
         refresh();
     }
 
     /// You can also do this if you prefer
     void increment() {
         _count++;
+        /// Event parameter can be omitted
         refresh();
+    }
+}
+
+/// Or associate an event type with the controller to use Turbo's event system
+enum CountEvent { increase, decrease }
+
+class CountController extends TurboController<CountEvent> {
+    int _count = 0;
+    int get count => _count;
+    set count(int value) {
+        _get = value;
+        
+        /// Using events in the `refresh` function
+        /// You can also emit the `emit` parameter so that widgets that are not subscribed
+        /// to any event are the only ones updated
+        refresh(
+            emit: value > count
+                ? CountEvent.increase
+                : (value < count ? CountEvent.decrease : null)
+        );
+    }
+
+    /// You can also do this if you prefer
+    void increment() {
+        _count++;
+        
+        refresh(emit: CountEvents.increase);
     }
 }
 
@@ -49,7 +79,20 @@ class MyCounter extends StatefulWidget {
 class _MyCounterState extends TurboState<MyCounter> {
     @override
     void initState() {
+        /// In this case the widget will react to all changes
         attach(counter);
+
+        /// Or provide events for the widget to react to. In this case, the
+        /// widget will update only if there is an increase in `count`
+        attach(
+            counter,
+            subscribeTo: counter.event(
+                [CountEvent.increase],
+                /// `after` and `before` are optional
+                after: (_) => print('Value increased'),
+            )
+        );
+
         attach(secondController);
         ...
         /// Attach as many controllers as you want, of various types and purposes
@@ -70,7 +113,20 @@ class MyCounter extends TurboWidget {
     
     @override
     void init() {
+        /// The widget will react to all changes
         attach(counter);
+
+        /// Or provide events for the widget to react to. In this case, the
+        /// widget will update only if there is an decrease in `count`
+        attach(
+            counter,
+            subscribeTo: counter.event(
+                [CountEvent.decrease],
+                /// `after` and `before` are optional
+                after: (_) => print('Value decreased'),
+            )
+        );
+
         ...
         /// Attach as many controllers as you want, of various types and purposes
         ...
@@ -92,6 +148,8 @@ In order to acheive the flexibility of the controller without separating your lo
 ```dart
 TurboBuilder(
     controller: counter,
+    /// Optional argument to use the event system
+    /// subscribeTo: counter.event([MyEvent.firstEv], after: (_) => print('Event happened')),
     builder: (myCtrl) {
         return Text(myCtrl.count.toString());
     }

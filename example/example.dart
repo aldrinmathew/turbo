@@ -10,6 +10,8 @@ enum CountEvent { increase, decrease }
 /// file: count_controller.dart
 
 /// Specify the type of the event to be associated with this controller
+///
+/// If you don't need events, just omit the type parameter
 class CountController extends TurboController<CountEvent> {
   int _count = 0;
   int get count => _count;

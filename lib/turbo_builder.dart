@@ -7,14 +7,26 @@ part of turbo;
 /// Provide the controller to which the Builder should respond to and the state
 /// of this widget will update automatically depending on your state design.
 ///
-/// You also have the option to provide a `TurboEvent` instance so that the
-/// builder will update only for the specified events
+/// You also have the option to provide a `TurboEvent` instance to
+/// `subscribeTo` so that the builder will update only for the specified
+/// events
 class TurboBuilder<E, T extends TurboController<E>> extends StatefulWidget {
+  /// [TurboBuilder] enables you to create resposive widgets or components of the
+  /// UI without separating that part of the UI to a different file. This adds
+  /// flexibility to the workflow.
+  ///
+  /// Provide the controller to which the Builder should respond to and the
+  /// state of this widget will update automatically depending on your state
+  /// design.
+  ///
+  /// You also have the option to provide a `TurboEvent` instance to
+  /// `subscribeTo` so that the builder will update only for the specified
+  /// events
   const TurboBuilder({
     Key? key,
     required this.controller,
     required this.builder,
-    this.event,
+    this.subscribeTo,
   }) : super(key: key);
 
   /// A [TurboController] instance that this widget should react to
@@ -26,7 +38,7 @@ class TurboBuilder<E, T extends TurboController<E>> extends StatefulWidget {
 
   /// The `TurboEvent` this builder should react to. This can be null, in which
   /// case all this widget will react to all updates
-  final TurboEvent<E>? event;
+  final TurboEvent<E>? subscribeTo;
 
   @override
   _TurboBuilderState createState() => _TurboBuilderState();
@@ -38,7 +50,7 @@ class _TurboBuilderState<E, T extends TurboController<E>>
   void initState() {
     attach(
       widget.controller,
-      subscribeTo: widget.event,
+      subscribeTo: widget.subscribeTo,
     );
     super.initState();
   }

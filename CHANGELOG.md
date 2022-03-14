@@ -1,3 +1,13 @@
+## 2.0.0
+
+- Added event system to the library
+- Added `TurboEvent` to represent an event associated with a TurboController
+- Added `event` function to `TurboController` to provide the appropriate `TurboEvent` instance
+- Updated attach, _detach, refresh and other functions have been updated to use the event system
+- Added check to prevent multiple attachments of the same controller for a widget
+- More documentation, added documentation for the new event system and for elements that didn't have any previously
+- Updated example.dart and README.md to reflect the changes
+
 ## 1.2.1
 
 - Updated README
