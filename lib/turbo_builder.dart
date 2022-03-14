@@ -6,11 +6,15 @@ part of turbo;
 ///
 /// Provide the controller to which the Builder should respond to and the state
 /// of this widget will update automatically depending on your state design.
-class TurboBuilder<T extends TurboController> extends StatefulWidget {
+///
+/// You also have the option to provide a `TurboEvent` instance so that the
+/// builder will update only for the specified events
+class TurboBuilder<E, T extends TurboController<E>> extends StatefulWidget {
   const TurboBuilder({
     Key? key,
     required this.controller,
     required this.builder,
+    this.event,
   }) : super(key: key);
 
   /// A [TurboController] instance that this widget should react to
@@ -20,15 +24,22 @@ class TurboBuilder<T extends TurboController> extends StatefulWidget {
   /// a widget
   final Widget Function(T ctrl) builder;
 
+  /// The `TurboEvent` this builder should react to. This can be null, in which
+  /// case all this widget will react to all updates
+  final TurboEvent<E>? event;
+
   @override
   _TurboBuilderState createState() => _TurboBuilderState();
 }
 
-class _TurboBuilderState<T extends TurboController>
-    extends TurboState<TurboBuilder<T>> {
+class _TurboBuilderState<E, T extends TurboController<E>>
+    extends TurboState<TurboBuilder<E, T>> {
   @override
   void initState() {
-    attach(widget.controller);
+    attach(
+      widget.controller,
+      event: widget.event,
+    );
     super.initState();
   }
 
