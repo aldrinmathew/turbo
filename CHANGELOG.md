@@ -1,3 +1,8 @@
+## 2.2.0
+
+- Fixed issue in root file of the library
+- The functional_builder.dart is experimental and so is not part of the library. However in the previous release, this file was not excluded
+
 ## 2.1.0
 
 - Updated to be compatible with Flutter 3
