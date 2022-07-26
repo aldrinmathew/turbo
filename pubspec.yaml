@@ -1,15 +1,15 @@
 name: turbo
 description: A simple, efficient state management solution for Flutter with Controllers, Builders and Events...
-version: 2.0.0
+version: 2.1.0
 homepage: https://github.com/aldrinsartfactory/turbo
 repository: https://github.com/aldrinsartfactory/turbo
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.6 <3.0.0"
 dependencies:
   flutter:
     sdk: flutter
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.0
 flutter: null

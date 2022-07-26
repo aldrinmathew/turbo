@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Updated to be compatible with Flutter 3
+- Removed unnecessary null checks for WidgetsBinding.instance
+
 ## 2.0.0
 
 - Added event system to the library

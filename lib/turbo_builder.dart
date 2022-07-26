@@ -41,6 +41,7 @@ class TurboBuilder<E, T extends TurboController<E>> extends StatefulWidget {
   final TurboEvent<E>? subscribeTo;
 
   @override
+  // ignore: library_private_types_in_public_api
   _TurboBuilderState createState() => _TurboBuilderState();
 }
 

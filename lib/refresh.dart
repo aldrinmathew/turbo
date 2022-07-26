@@ -10,13 +10,13 @@ void stateRefresh<T extends StatefulWidget>({
   required State<T> state,
   void Function()? change,
 }) {
-  if (WidgetsBinding.instance != null) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+  try {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (state.mounted) {
         state.setState(change ?? () {});
       }
     });
-  } else {
+  } catch (_) {
     try {
       if (state.mounted) {
         state.setState(change ?? () {});
@@ -32,11 +32,11 @@ void stateRefresh<T extends StatefulWidget>({
 ///  [WidgetsBinding.instance], so as to make sure that the `setState` method is
 ///  not called while the framework is building the widget.
 void widgetRefresh({required TurboElement element}) {
-  if (WidgetsBinding.instance != null) {
-    if (WidgetsBinding.instance!.buildOwner != null) {
-      WidgetsBinding.instance!.buildOwner!.scheduleBuildFor(element);
+  try {
+    if (WidgetsBinding.instance.buildOwner != null) {
+      WidgetsBinding.instance.buildOwner!.scheduleBuildFor(element);
     } else {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         try {
           element.markNeedsBuild();
         } catch (error) {
@@ -44,7 +44,7 @@ void widgetRefresh({required TurboElement element}) {
         }
       });
     }
-  } else {
+  } catch (_) {
     try {
       element.markNeedsBuild();
     } catch (error) {
